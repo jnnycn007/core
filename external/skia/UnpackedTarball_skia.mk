@@ -19,7 +19,7 @@ skia_patches := \
     fix-alpha-difference-copy.patch.1 \
     share-grcontext.patch.1 \
     clang-attributes-warning.patch.1 \
-    fontconfig-get-typeface.patch.0 \
+    fontconfig-get-typeface.patch.1 \
     windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
@@ -37,7 +37,6 @@ skia_patches := \
     redefinition-of-op.patch.0 \
     0001-Added-missing-include-cstdio.patch \
     fix-SkDebugf-link-error.patch.1 \
-    incomplete.patch.0 \
     ubsan-missing-typeinfo.patch.1 \
     help-msvc-analyzer.patch \
     always_inline_and_multiversioning_conflict.patch.1 \
@@ -54,7 +53,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,skia,\
 ))
 
 $(eval $(call gb_UnpackedTarball_set_post_action,skia,\
-    mv modules/skcms/skcms.cc modules/skcms/skcms.cpp \
+    mv modules/skcms/skcms.cc modules/skcms/skcms.cpp && \
+	mv modules/skcms/src/skcms_TransformBaseline.cc modules/skcms/src/skcms_TransformBaseline.cpp && \
+	mv modules/skcms/src/skcms_TransformHsw.cc modules/skcms/src/skcms_TransformHsw.cpp && \
+	mv modules/skcms/src/skcms_TransformSkx.cc modules/skcms/src/skcms_TransformSkx.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:

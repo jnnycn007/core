@@ -127,12 +127,13 @@ $(eval $(call gb_Library_set_include,skia,\
     -I$(gb_UnpackedTarball_workdir)/skia \
     -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/include/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/src/gpu/vk/vulkanmemoryallocator/ \
     -I$(gb_UnpackedTarball_workdir)/skia/include/third_party/vulkan/ \
     -I$(SRCDIR)/external/skia/inc/ \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,skia,\
-    external/skia/source/SkMemory_malloc \
     external/skia/source/skia_compiler \
     external/skia/source/skia_opts \
 ))
@@ -144,14 +145,6 @@ $(eval $(call gb_Library_set_generated_cxx_suffix,skia,cpp))
 ifneq ($(filter-out WNT MACOSX,$(OS)),)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig \
-))
-endif
-
-# from file skia/gn/BUILD.gn:426, target "optional("fontmgr_fontconfig_factory")"
-#
-ifneq ($(filter-out WNT MACOSX,$(OS)),)
-$(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/ports/SkFontMgr_fontconfig_factory \
 ))
 endif
 
@@ -176,14 +169,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 endif
 
-# from file skia/gn/BUILD.gn:508, target "optional("fontmgr_mac_ct_factory")"
-#
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/ports/SkFontMgr_mac_ct_factory \
-))
-endif
-
 # from file skia/gn/BUILD.gn:514, target "optional("fontmgr_win")"
 #
 ifeq ($(OS),WNT)
@@ -192,14 +177,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkFontMgr_win_dw \
     UnpackedTarball/skia/src/ports/SkScalerContext_win_dw \
     UnpackedTarball/skia/src/ports/SkTypeface_win_dw \
-))
-endif
-
-# from file skia/gn/BUILD.gn:530, target "optional("fontmgr_win_factory")"
-#
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/ports/SkFontMgr_win_dw_factory \
 ))
 endif
 
@@ -236,6 +213,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkParseEncodedOrigin \
     UnpackedTarball/skia/src/codec/SkSampledCodec \
     UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
+    UnpackedTarball/skia/src/ports/SkMemory_malloc \
     UnpackedTarball/skia/src/ports/SkOSFile_stdio \
     UnpackedTarball/skia/src/sfnt/SkOTTable_name \
     UnpackedTarball/skia/src/sfnt/SkOTUtils \
@@ -267,6 +245,7 @@ endif
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
+    UnpackedTarball/skia/tools/gpu/vk/VkTestMemoryAllocator \
 ))
 endif
 
@@ -297,12 +276,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodec \
     UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
     UnpackedTarball/skia/src/codec/SkColorPalette \
+    UnpackedTarball/skia/src/codec/SkExif \
     UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
-    UnpackedTarball/skia/src/codec/SkMasks \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
     UnpackedTarball/skia/src/codec/SkPixmapUtils \
     UnpackedTarball/skia/src/codec/SkSampler \
     UnpackedTarball/skia/src/codec/SkSwizzler \
+    UnpackedTarball/skia/src/codec/SkTiffUtility \
 ))
 
 # from file skia/gn/codec.gni, target "skia_codec_decode_bmp"
@@ -320,6 +300,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/base/SkArenaAlloc \
+    UnpackedTarball/skia/src/base/SkBase64 \
     UnpackedTarball/skia/src/base/SkBezierCurves \
 	UnpackedTarball/skia/src/base/SkBlockAllocator \
     UnpackedTarball/skia/src/base/SkBuffer \
@@ -385,14 +366,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkCubicMap \
     UnpackedTarball/skia/src/core/SkData \
     UnpackedTarball/skia/src/core/SkDataTable \
-    UnpackedTarball/skia/src/core/SkDebug \
     UnpackedTarball/skia/src/core/SkDescriptor \
     UnpackedTarball/skia/src/core/SkDevice \
     UnpackedTarball/skia/src/core/SkDistanceFieldGen \
     UnpackedTarball/skia/src/core/SkDocument \
     UnpackedTarball/skia/src/core/SkDraw \
     UnpackedTarball/skia/src/core/SkDrawBase \
-    UnpackedTarball/skia/src/core/SkDrawLooper \
     UnpackedTarball/skia/src/core/SkDrawShadowInfo \
     UnpackedTarball/skia/src/core/SkDraw_atlas \
     UnpackedTarball/skia/src/core/SkDraw_text \
@@ -421,6 +400,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkImageFilterTypes \
     UnpackedTarball/skia/src/core/SkImageGenerator \
     UnpackedTarball/skia/src/core/SkImageInfo \
+    UnpackedTarball/skia/src/core/SkKnownRuntimeEffects \
     UnpackedTarball/skia/src/core/SkLatticeIter \
     UnpackedTarball/skia/src/core/SkLineClipper \
     UnpackedTarball/skia/src/core/SkLocalMatrixImageFilter \
@@ -432,6 +412,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkMaskCache \
     UnpackedTarball/skia/src/core/SkMaskFilter \
     UnpackedTarball/skia/src/core/SkMaskGamma \
+    UnpackedTarball/skia/src/core/SkMasks \
     UnpackedTarball/skia/src/core/SkMatrix \
     UnpackedTarball/skia/src/core/SkMatrixInvert \
     UnpackedTarball/skia/src/core/SkMemset_opts \
@@ -440,6 +421,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkMipmap \
     UnpackedTarball/skia/src/core/SkMipmapAccessor \
     UnpackedTarball/skia/src/core/SkMipmapBuilder \
+    UnpackedTarball/skia/src/core/SkMipmapDrawDownSampler \
+    UnpackedTarball/skia/src/core/SkMipmapHQDownSampler \
     UnpackedTarball/skia/src/core/SkOpts \
     UnpackedTarball/skia/src/core/SkOverdrawCanvas \
     UnpackedTarball/skia/src/core/SkPaint \
@@ -485,7 +468,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkScan_Antihair \
     UnpackedTarball/skia/src/core/SkScan_Hairline \
     UnpackedTarball/skia/src/core/SkScan_Path \
-    UnpackedTarball/skia/src/core/SkScan_SAAPath \
     UnpackedTarball/skia/src/core/SkSpecialImage \
     UnpackedTarball/skia/src/core/SkSpriteBlitter_ARGB32 \
     UnpackedTarball/skia/src/core/SkStream \
@@ -501,7 +483,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkSwizzler_opts \
     UnpackedTarball/skia/src/core/SkTaskGroup \
     UnpackedTarball/skia/src/core/SkTextBlob \
-    UnpackedTarball/skia/src/core/SkTextBlobTrace \
     UnpackedTarball/skia/src/core/SkTypeface \
     UnpackedTarball/skia/src/core/SkTypefaceCache \
     UnpackedTarball/skia/src/core/SkTypeface_remote \
@@ -629,7 +610,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/effects/SkEmbossMask \
     UnpackedTarball/skia/src/effects/SkEmbossMaskFilter \
     UnpackedTarball/skia/src/effects/SkHighContrastFilter \
-    UnpackedTarball/skia/src/effects/SkLayerDrawLooper \
     UnpackedTarball/skia/src/effects/SkShaderMaskFilterImpl \
     UnpackedTarball/skia/src/effects/SkTableMaskFilter \
     UnpackedTarball/skia/src/effects/SkTrimPathEffect \
@@ -702,10 +682,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/SkSLPosition \
     UnpackedTarball/skia/src/sksl/SkSLSampleUsage \
     UnpackedTarball/skia/src/sksl/SkSLString \
-    UnpackedTarball/skia/src/sksl/SkSLThreadContext \
     UnpackedTarball/skia/src/sksl/SkSLUtil \
     UnpackedTarball/skia/src/sksl/analysis/SkSLCanExitWithoutReturningValue \
     UnpackedTarball/skia/src/sksl/analysis/SkSLCheckProgramStructure \
+    UnpackedTarball/skia/src/sksl/analysis/SkSLCheckSymbolTableCorrectness \
     UnpackedTarball/skia/src/sksl/analysis/SkSLFinalizationChecks \
     UnpackedTarball/skia/src/sksl/analysis/SkSLGetLoopControlFlowInfo \
     UnpackedTarball/skia/src/sksl/analysis/SkSLGetLoopUnrollInfo \
@@ -759,6 +739,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/ir/SkSLSwitchCase \
     UnpackedTarball/skia/src/sksl/ir/SkSLSwitchStatement \
     UnpackedTarball/skia/src/sksl/ir/SkSLSwizzle \
+    UnpackedTarball/skia/src/sksl/ir/SkSLSymbol \
     UnpackedTarball/skia/src/sksl/ir/SkSLSymbolTable \
     UnpackedTarball/skia/src/sksl/ir/SkSLTernaryExpression \
     UnpackedTarball/skia/src/sksl/ir/SkSLType \
@@ -773,8 +754,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateDeadGlobalVariables \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateDeadLocalVariables \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateEmptyStatements \
+    UnpackedTarball/skia/src/sksl/transform/SkSLEliminateUnnecessaryBraces \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateUnreachableCode \
     UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinFunctions \
+    UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinStructs \
     UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinVariables \
     UnpackedTarball/skia/src/sksl/transform/SkSLHoistSwitchVarDeclarationsAtTopLevel \
     UnpackedTarball/skia/src/sksl/transform/SkSLRenamePrivateSymbols \
@@ -802,7 +785,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 # from file skia/gn/utils.gni:55, target "skia_utils_private"
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/utils/SkBase64 \
     UnpackedTarball/skia/src/utils/SkCamera \
     UnpackedTarball/skia/src/utils/SkCanvasStack \
     UnpackedTarball/skia/src/utils/SkCanvasStateUtils \
@@ -834,6 +816,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/mac/SkCTFont \
+    UnpackedTarball/skia/src/utils/mac/SkCTFontCreateExactCopy \
     UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
 ))
 endif
@@ -895,7 +878,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/GrDriverBugWorkarounds \
     UnpackedTarball/skia/src/gpu/ganesh/GrDynamicAtlas \
     UnpackedTarball/skia/src/gpu/ganesh/GrEagerVertexAllocator \
-    UnpackedTarball/skia/src/gpu/ganesh/GrFinishCallbacks \
     UnpackedTarball/skia/src/gpu/ganesh/GrFixedClip \
     UnpackedTarball/skia/src/gpu/ganesh/GrFragmentProcessor \
     UnpackedTarball/skia/src/gpu/ganesh/GrFragmentProcessors \
@@ -942,7 +924,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/GrStyle \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurface \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceCharacterization \
-    UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceInfo \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceProxy \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceProxyView \
     UnpackedTarball/skia/src/gpu/ganesh/GrTestUtils \
@@ -1075,12 +1056,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/Blend \
     UnpackedTarball/skia/src/gpu/BlendFormula \
     UnpackedTarball/skia/src/gpu/BlurUtils \
+    UnpackedTarball/skia/src/gpu/DataUtils \
     UnpackedTarball/skia/src/gpu/DitherUtils \
+    UnpackedTarball/skia/src/gpu/MutableTextureState \
     UnpackedTarball/skia/src/gpu/PipelineUtils \
     UnpackedTarball/skia/src/gpu/RectanizerPow2 \
     UnpackedTarball/skia/src/gpu/RectanizerSkyline \
     UnpackedTarball/skia/src/gpu/ResourceKey \
     UnpackedTarball/skia/src/gpu/ShaderErrorHandler \
+    UnpackedTarball/skia/src/gpu/SkBackingFit \
     UnpackedTarball/skia/src/gpu/Swizzle \
     UnpackedTarball/skia/src/gpu/TiledTextureUtils \
     UnpackedTarball/skia/src/gpu/tessellate/FixedCountBufferUtils \
@@ -1106,14 +1090,17 @@ endif
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/vk/AHardwareBufferVk \
+    UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkBackendSemaphore \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkBackendSurface \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCaps \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCommandBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCommandPool \
+    UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkContextThreadSafeProxy \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorPool \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorSet \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorSetManager \
+    UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDirectContext \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkFramebuffer \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkGpu \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkImage \
@@ -1154,10 +1141,13 @@ ifeq ($(OS),MACOSX)
 ifeq ($(SKIA_GPU),METAL)
 $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlAttachment \
+    UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBackendSemaphore \
+    UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBackendSurface \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlCaps \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlCommandBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlDepthStencil \
+    UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlDirectContext \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlFramebuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlGpu \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlOpsRenderPass \
@@ -1189,6 +1179,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/vk/VulkanExtensions \
     UnpackedTarball/skia/src/gpu/vk/VulkanInterface \
     UnpackedTarball/skia/src/gpu/vk/VulkanMemory \
+    UnpackedTarball/skia/src/gpu/vk/VulkanMutableTextureState \
+    UnpackedTarball/skia/src/gpu/vk/VulkanUtilsPriv \
 ))
 endif
 
@@ -1204,11 +1196,11 @@ endif
 endif
 
 
-# from file skia/third_party/vulkanmemoryallocator/BUILD.gn:15, target "source_set("vulkanmemoryallocator")"
+# from file skia/src/gpu/vk/vulkanmemoryallocator/BUILD.gn:15, target "source_set("vulkanmemoryallocator")"
 #
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
+    UnpackedTarball/skia/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper \
 ))
 endif
 
@@ -1229,7 +1221,8 @@ endif
 # Not used, uses OpenGL - UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac
 
 $(eval $(call gb_Library_add_exception_objects,skia,\
-    external/skia/source/skia_opts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
+    external/skia/source/skia_opts_ssse3, \
+	$(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkMemset_opts_avx, \
@@ -1237,13 +1230,18 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
+	UnpackedTarball/skia/modules/skcms/src/skcms_TransformSkx, \
+	$(CXXFLAGS_INTRINSICS_AVX512) $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512) \
+    $(LO_SKIA_AVOID_INLINE_COPIES) \
+))
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_hsw \
     UnpackedTarball/skia/src/core/SkSwizzler_opts_hsw \
     UnpackedTarball/skia/src/core/SkBlitRow_opts_hsw \
-    UnpackedTarball/skia/src/core/SkBitmapProcState_opts_hsw, \
-        $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
-        $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \
-        $(LO_SKIA_AVOID_INLINE_COPIES) \
+	UnpackedTarball/skia/modules/skcms/src/skcms_TransformHsw, \
+	$(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
+	$(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \
+	$(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkSwizzler_opts_ssse3 \
@@ -1253,11 +1251,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 	$(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 
+
 # Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
 # this without optimizations would mean having each pixel of saved images be
 # processed by unoptimized code.
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/modules/skcms/skcms, $(gb_COMPILEROPTFLAGS) \
+	UnpackedTarball/skia/modules/skcms/src/skcms_TransformBaseline \
+    UnpackedTarball/skia/modules/skcms/skcms, \
+	$(gb_COMPILEROPTFLAGS) \
 ))
 
 
